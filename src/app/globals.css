@@ -2,13 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .hoverEffect{
+    @apply cursor-pointer hover:bg-gray-200 rounded-full w-[52px] xl:w-auto h-[52px] xl:h-auto xl:p-3
+  }
+}
+
+
+
+
+
+
+
+
+
+
+/*
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
 
-/* 
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -31,4 +47,5 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-}  */
+}  
+*/
