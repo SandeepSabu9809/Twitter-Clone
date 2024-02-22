@@ -35,8 +35,8 @@ export default function Widgets() {
                     <input className="absolute inset-0 rounded-full pl-11 border-r-gray-500 text-gray-700 focus:shadow-lg focus:bg-white bg-gray-100 " type="text" placeholder="Search Twitter" />
                 </div>
             </div>
-            <div className="text-gray-700 space-y-3 bg-gray-300 rounded-xl pt-2 w-[90%] xl:w-[75%] ">
-                <h4 className="font-bold text-xl p-x-4">What's happening</h4>
+            <div className="text-gray-700 space-y-3 bg-gray-100 rounded-xl pt-2 w-[90%] xl:w-[75%] ">
+                <h4 className="font-bold text-xl px-4">What's happening</h4>
                 {articles.slice(0, count).map((article, index) => (
                     <News key={index} props={article} />
                 ))}
