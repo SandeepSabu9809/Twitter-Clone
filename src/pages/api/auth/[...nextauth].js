@@ -12,8 +12,18 @@ export const authOptions = {
   ],
 
   pages:{
-    signin:"/auth/signin"
-  }
+    signIn:"/auth/signin"
+  },
+
+  callbacks:{
+    async session({session,token}){
+      session.user.username = session.user.name.split(" ").join("").toLocaleLowerCase();
+      session.user.id = token.sub;
+      return session;
+    }
+  },
+
+
 
 }
 

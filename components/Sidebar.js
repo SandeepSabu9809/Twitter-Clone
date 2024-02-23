@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image"
 import SidebarMenuItem from "./SidebarMenuItem"
 import { MdHome } from "react-icons/md";
@@ -9,9 +10,14 @@ import { FaRegClipboard } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import { PiDotsThreeCircle } from "react-icons/pi";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { useSession ,signIn, signOut } from "next-auth/react";
 
 
 const Sidebar = () => {
+
+  const {data: session } = useSession();
+  console.log(session);
+
   return (
     <div className="hidden sm:flex flex-col p-2 xl:items-start fixed h-full xl:ml-24">
       {/* Twitter Logo */}
@@ -23,31 +29,43 @@ const Sidebar = () => {
       <div className="mt-5 mb-2.5 xl:items-start">
         <SidebarMenuItem text="Home" Icon={MdHome } active />
         <SidebarMenuItem text="Explore" Icon={FaHashtag } />
-        <SidebarMenuItem text="Notifications" Icon={FaRegBell } />
-        <SidebarMenuItem text="Messages" Icon={TbInbox  } />
-        <SidebarMenuItem text="Bookmarks" Icon={FaRegBookmark } />
-        <SidebarMenuItem text="Lists" Icon={FaRegClipboard  } />
-        <SidebarMenuItem text="Profile" Icon={FaRegUser  } />
-        <SidebarMenuItem text="More" Icon={PiDotsThreeCircle  } />
-        
-      </div>
 
-      {/* Button */}
+        {session && session.user && (
+          <>
+          <SidebarMenuItem text="Notifications" Icon={FaRegBell } />
+          <SidebarMenuItem text="Messages" Icon={TbInbox  } />
+          <SidebarMenuItem text="Bookmarks" Icon={FaRegBookmark } />
+          <SidebarMenuItem text="Lists" Icon={FaRegClipboard  } />
+          <SidebarMenuItem text="Profile" Icon={FaRegUser  } />
+          <SidebarMenuItem text="More" Icon={PiDotsThreeCircle  } />
+          </>
+        )}
+      </div>
+      
+      {(session&& session.user) ? (
+        <>
+          {/* Button */}
       <button className="bg-blue-400 text-white rounded-full w-56 h-12 font-bold shadow-md hover:brightness-95 text-lg hidden xl:inline " >Tweet</button>
-  
-      {/* Mini-profile */}
-     <div className="hoverEffect text-gray-700 flex items-center justify-center xl:justify-start mt-auto ">
-        <img 
-          src="https://wallpapers.com/images/hd/cool-boy-anime-with-black-mask-0d8fq4rnz0h71dsz.jpg" 
-          alt="user" 
-          className="w-10 h-10 rounded-full xl:mr-2 " 
-        />
-        <div className="leading-5 hidden  xl:inline">
-          <h4 className="font-bold">NxS Immense</h4>
-          <p className="text-gray-500">@CodeNeptune</p>
-        </div>
-        <HiOutlineDotsHorizontal className=" ml-8 hidden  xl:inline" />
-     </div>
+        {/* Mini-profile */}
+      <div className="hoverEffect text-gray-700 flex items-center justify-center xl:justify-start mt-auto ">
+          <img 
+            onClick={signOut}
+            src={session.user.image} 
+            alt="user" 
+            className="w-10 h-10 rounded-full xl:mr-2 " 
+          />
+          <div className="leading-5 hidden  xl:inline">
+            <h4 className="font-bold">{session.user.name}</h4>
+            <p className="text-gray-500">@{session.user.username}</p>
+          </div>
+          <HiOutlineDotsHorizontal className=" ml-8 hidden  xl:inline" />
+      </div>
+        </>
+      ) :(
+        <button onClick={signIn} className="bg-blue-400 mt-4 text-white rounded-full w-36 h-12 font-bold shadow-md hover:brightness-95 text-lg hidden xl:inline " >Sign in</button>
+      )}
+
+      
     
     </div>
   )

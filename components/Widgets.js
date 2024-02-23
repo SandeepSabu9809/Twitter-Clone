@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { SlMagnifier } from "react-icons/sl";
 import News from "./News";
 
+
 export default function Widgets() {
     const [count, setCount] = useState(3); // Initial count state for news
     const [pnum, setPnum] = useState(3); // Initial count state for people
