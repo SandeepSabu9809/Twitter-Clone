@@ -16,7 +16,7 @@ import { useSession ,signIn, signOut } from "next-auth/react";
 const Sidebar = () => {
 
   const {data: session } = useSession();
-  console.log(session);
+  
 
   return (
     <div className="hidden sm:flex flex-col p-2 xl:items-start fixed h-full xl:ml-24">
@@ -49,7 +49,6 @@ const Sidebar = () => {
         {/* Mini-profile */}
       <div className="hoverEffect text-gray-700 flex items-center justify-center xl:justify-start mt-auto ">
           <img 
-            onClick={signOut}
             src={session.user.image} 
             alt="user" 
             className="w-10 h-10 rounded-full xl:mr-2 " 
@@ -58,13 +57,22 @@ const Sidebar = () => {
             <h4 className="font-bold">{session.user.name}</h4>
             <p className="text-gray-500">@{session.user.username}</p>
           </div>
-          <HiOutlineDotsHorizontal className=" ml-8 hidden  xl:inline" />
+          {/* <HiOutlineDotsHorizontal className=" ml-8 hidden  xl:inline" /> */}
+          <div className="dropdown dropdown-top">
+            <div tabIndex={0} role="button" >
+              < HiOutlineDotsHorizontal className=" ml-8 hidden  xl:inline" />
+              </div>
+            <ul tabIndex={0} className="dropdown-content z-[1] menu p-1.5  mb-6  bg-gray-200 hover:bg-slate-200 rounded-2xl w-44 text-sm ">
+              <li onClick={signOut} ><a>Log out</a></li>
+            </ul>
+          </div>
       </div>
         </>
       ) :(
         <button onClick={signIn} className="bg-blue-400 mt-4 text-white rounded-full w-36 h-12 font-bold shadow-md hover:brightness-95 text-lg hidden xl:inline " >Sign in</button>
       )}
 
+   
       
     
     </div>
