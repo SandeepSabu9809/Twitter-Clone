@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { IoCloseOutline } from "react-icons/io5";
 
 
 export default function Input() {
@@ -17,6 +18,8 @@ export default function Input() {
   const {data: session } = useSession();
 
   const sendPost = async () => {
+    setInput("");
+    setSelectedFile(null);
     const docRef = await addDoc(collection(db,"posts"),{
       id:session.user.id,
       text:input,
@@ -26,15 +29,14 @@ export default function Input() {
       username:session.user.username,
     });
     const imageRef = ref(storage, `posts/${docRef.id}/image`);
-    console.log("imageRef:", imageRef);
-    console.log("selectedFile:", selectedFile);
-    if(setSelectedFile){
+    if(selectedFile){
       await uploadString(imageRef, selectedFile, "data_url").then(async () => {
         const downloadURL = await getDownloadURL(imageRef);
+        await updateDoc(doc(db,"posts",docRef.id),{
+          image:downloadURL,
+        })
       })
     }
-
-    setInput("");
   }
 
 
@@ -70,11 +72,17 @@ export default function Input() {
                > 
                </textarea>
            </div>
+           {selectedFile && (
+            <div className=" relative">
+              <IoCloseOutline onClick={() => setSelectedFile(null)} className="h-7 w-6 absolute m-2  border rounded-full " />
+              <img src={selectedFile} alt="" />
+            </div>
+           )}
            <div className="flex items-center justify-between pt-2.5 ">
                <div className="flex">
                    <div className="" onClick={()=>filePicker.current.click()}>
                     <MdOutlinePhoto className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100 " />
-                    <input type="file" hidden ref={filePicker} onClick={addImageToPost} />
+                    <input type="file" hidden ref={filePicker} onChange={addImageToPost} />
                    </div>
                    <HiOutlineEmojiHappy className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100 " />
                </div>
