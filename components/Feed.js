@@ -1,28 +1,23 @@
+'use client'
 import { HiOutlineSparkles } from "react-icons/hi";
 import Input from "./Input";
 import Posts from "./Posts";
+import { useEffect, useState } from "react";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { db } from "../firebase";
 
 export default function Feed() {
-  const posts = [
-    {
-      id : "1",
-      name : "NxS Immense",
-      username : "CodeNeptune",
-      userImg : "https://wallpapers.com/images/hd/cool-boy-anime-with-black-mask-0d8fq4rnz0h71dsz.jpg",
-      img : "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjZ8fG5hdHVyZXxlbnwwfHwwfHx8MA%3D%3D",
-      text : "nice view!",
-      timestamp : "2 hours ago",   
-    },
-    {
-      id : "2",
-      name : "NxS Immense",
-      username : "CodeNeptune",
-      userImg : "https://wallpapers.com/images/hd/cool-boy-anime-with-black-mask-0d8fq4rnz0h71dsz.jpg",
-      img : "https://images.unsplash.com/photo-1497449493050-aad1e7cad165?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTd8fG5hdHVyZXxlbnwwfHwwfHx8MA%3D%3D",
-      text : "wow!",
-      timestamp : "2 days ago",   
-    },
-  ];
+  
+  const [posts,setPosts] = useState([]);
+  useEffect(
+    () => onSnapshot(
+      query(collection(db,"posts"), orderBy("timestamp","desc")),
+      (snapshot) => {
+        setPosts(snapshot.docs);
+      }
+    ),
+    []
+  )    
 
   return (
     <div className="xl:ml-[370px] border-l border-r border-gray-200 xl:min-w-[576px] sm:ml-[73px] flex-grow max-w-xl ">
