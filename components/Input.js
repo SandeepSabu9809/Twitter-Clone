@@ -13,13 +13,14 @@ export default function Input() {
 
   const [input, setInput] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [loading,setLoading] = useState(false);
   const filePicker = useRef(null);
 
   const {data: session } = useSession();
 
   const sendPost = async () => {
-    setInput("");
-    setSelectedFile(null);
+    if(loading) return;
+    setLoading(true);
     const docRef = await addDoc(collection(db,"posts"),{
       id:session.user.id,
       text:input,
@@ -28,6 +29,9 @@ export default function Input() {
       name:session.user.name,
       username:session.user.username,
     });
+    setInput("");
+    setSelectedFile(null);
+    setLoading(false);
     const imageRef = ref(storage, `posts/${docRef.id}/image`);
     if(selectedFile){
       await uploadString(imageRef, selectedFile, "data_url").then(async () => {
@@ -75,18 +79,23 @@ export default function Input() {
            {selectedFile && (
             <div className=" relative">
               <IoCloseOutline onClick={() => setSelectedFile(null)} className="h-7 w-6 absolute m-2  border rounded-full " />
-              <img src={selectedFile} alt="" />
+              <img src={selectedFile} className={`${loading && "animate-pulse"}`} alt="" />
             </div>
            )}
            <div className="flex items-center justify-between pt-2.5 ">
-               <div className="flex">
+            {!loading && (
+              <>
+                 <div className="flex">
                    <div className="" onClick={()=>filePicker.current.click()}>
                     <MdOutlinePhoto className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100 " />
                     <input type="file" hidden ref={filePicker} onChange={addImageToPost} />
                    </div>
                    <HiOutlineEmojiHappy className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100 " />
-               </div>
-               <button onClick={sendPost} disabled={!input.trim()} className="bg-blue-400 text-white px-4 py-1.5 rounded-full font-bold shadow-md hover:brightness-95 disabled:opacity-50 " >Tweet</button>
+                 </div>
+                 <button onClick={sendPost} disabled={!input.trim()} className="bg-blue-400 text-white px-4 py-1.5 rounded-full font-bold shadow-md hover:brightness-95 disabled:opacity-50 " >Tweet</button>
+              </>
+            )}
+            
            </div>
           </div>
        </div>
