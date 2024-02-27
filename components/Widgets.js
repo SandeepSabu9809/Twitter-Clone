@@ -60,7 +60,7 @@ export default function Widgets() {
                 <h4 className="font-bold text-xl px-4" >Who to follow</h4>
                 {people.slice(0,pnum).map((randomuser) => (
                     <div key={randomuser.login.username} className="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-200 ">
-                        <Image className="rounded-full" width={40} src={randomuser.picture.thumbnail} alt="" />
+                        <Image className="rounded-full" width={40} height={40} src={randomuser.picture.thumbnail} alt="" />
                         <div className="truncate ml-4 leading-5">
                             <h4 className="font-bold hover:underline text-[14px] " >{randomuser.login.username}</h4>
                             <h5 className="text-[13px] text-gray-500 truncate " >{randomuser.name.first + " " + randomuser.name.last }</h5>

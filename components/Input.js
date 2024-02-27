@@ -63,6 +63,8 @@ export default function Input() {
       <div className="flex border-b border-gray-200 p-3 space-x-3 ">
        
       <Image 
+         width={11}
+         height={11}
          src={session.user.image} 
          alt="user" 
          className="w-11 h-11 rounded-full cursor-pointer hover:brightness-95 "
@@ -81,7 +83,7 @@ export default function Input() {
            {selectedFile && (
             <div className=" relative">
               <IoCloseOutline onClick={() => setSelectedFile(null)} className="h-7 w-6 absolute m-2  border rounded-full " />
-              <Image src={selectedFile} className={`${loading && "animate-pulse"}`} alt="" />
+              <Image width={500} height={500} src={selectedFile} className={`${loading && "animate-pulse"}`} alt="" />
             </div>
            )}
            <div className="flex items-center justify-between pt-2.5 ">

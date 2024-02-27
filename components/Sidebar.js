@@ -49,6 +49,8 @@ const Sidebar = () => {
         {/* Mini-profile */}
       <div className="hoverEffect text-gray-700 flex items-center justify-center xl:justify-start mt-auto ">
           <Image 
+            width={10}
+            height={10}
             src={session.user.image} 
             alt="user" 
             className="w-10 h-10 rounded-full xl:mr-2 " 

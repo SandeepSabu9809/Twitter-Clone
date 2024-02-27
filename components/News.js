@@ -8,7 +8,7 @@ export default function News({props}) {
           <h6 className="text-sm font-bold">{props.title}</h6>
           <p className="text-xs font-medium text-gray-500">{props.source.name}</p>
         </div>
-        <Image className="rounded-xl" src={props.urlToImage} width="70" alt="" />
+        <Image className="rounded-xl" src={props.urlToImage} width={70} height={70} alt="" />
       </div>
     </a>
   )
