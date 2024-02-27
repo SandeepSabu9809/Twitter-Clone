@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from "react";
 import { SlMagnifier } from "react-icons/sl";
 import News from "./News";
