@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { SlMagnifier } from "react-icons/sl";
 import News from "./News";
+import Image from "next/image";
 
 
 export default function Widgets() {
@@ -49,7 +50,7 @@ export default function Widgets() {
                 </div>
             </div>
             <div className="text-gray-700 space-y-3 bg-gray-100 rounded-xl pt-2 w-[90%] xl:w-[75%] ">
-                <h4 className="font-bold text-xl px-4">What's happening</h4>
+                <h4 className="font-bold text-xl px-4">What&apos;s happening</h4>
                 {articles.slice(0, count).map((article, index) => (
                     <News key={index} props={article} />
                 ))}
@@ -59,7 +60,7 @@ export default function Widgets() {
                 <h4 className="font-bold text-xl px-4" >Who to follow</h4>
                 {people.slice(0,pnum).map((randomuser) => (
                     <div key={randomuser.login.username} className="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-200 ">
-                        <img className="rounded-full" width={40} src={randomuser.picture.thumbnail} alt="" />
+                        <Image className="rounded-full" width={40} src={randomuser.picture.thumbnail} alt="" />
                         <div className="truncate ml-4 leading-5">
                             <h4 className="font-bold hover:underline text-[14px] " >{randomuser.login.username}</h4>
                             <h5 className="text-[13px] text-gray-500 truncate " >{randomuser.name.first + " " + randomuser.name.last }</h5>

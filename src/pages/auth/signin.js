@@ -1,10 +1,11 @@
 import 'tailwindcss/tailwind.css';
 import { getProviders ,signIn } from 'next-auth/react';
+import Image from 'next/image';
 
 export default function signin({providers}) {
   return (
     <div className='flex justify-center mt-20 space-x-4' >
-      <img
+      <Image
       src="https://spy.family/wp-content/uploads/2022/12/ch12findtimelinepngtwimg1920.png" 
       alt="twitter image inside a phone" 
       className='hidden object-cover md:w-44 md:h-80 rotate-6 md:inline-flex' 
