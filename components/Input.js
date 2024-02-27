@@ -81,7 +81,7 @@ export default function Input() {
            {selectedFile && (
             <div className=" relative">
               <IoCloseOutline onClick={() => setSelectedFile(null)} className="h-7 w-6 absolute m-2  border rounded-full " />
-              <img src={selectedFile} className={`${loading && "animate-pulse"}`} alt="" />
+              <Image src={selectedFile} className={`${loading && "animate-pulse"}`} alt="" />
             </div>
            )}
            <div className="flex items-center justify-between pt-2.5 ">
