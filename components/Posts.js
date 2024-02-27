@@ -8,16 +8,16 @@ import Moment from "react-moment";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+// import { useEffect , useState } from "react";
 
 export default function Posts({post}) {
  
   const {data : session} = useSession();
-  const [likes,setLikes] = useState([]);
+  // const [likes,setLikes] = useState([]);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-  },[db])
+  // },[db])
 
   async function likePost(){
     await setDoc(doc(db, "posts" , post.id ,"likes" , session.user.id ), {
