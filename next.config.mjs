@@ -1,10 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images:{
-        domains:["static.vecteezy.com"],
+    images: {
+        domains: ["static.vecteezy.com"],
     },
-    output: 'export',
-
+    // Define exportPathMap to enable static HTML export
+    exportPathMap: function () {
+        return {
+            '/': { page: '/' },
+            // Add other routes as needed
+        };
+    },
 };
 
 export default nextConfig;
