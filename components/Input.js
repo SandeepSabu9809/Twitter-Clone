@@ -7,6 +7,7 @@ import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/fi
 import { db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { IoCloseOutline } from "react-icons/io5";
+import Image from "next/image";
 
 
 export default function Input() {
@@ -61,7 +62,7 @@ export default function Input() {
     {session && session.user && (
       <div className="flex border-b border-gray-200 p-3 space-x-3 ">
        
-      <img 
+      <Image 
          src={session.user.image} 
          alt="user" 
          className="w-11 h-11 rounded-full cursor-pointer hover:brightness-95 "
