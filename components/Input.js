@@ -17,7 +17,7 @@ export default function Input() {
   const filePicker = useRef(null);
 
   const {data: session } = useSession();
-
+  
   const sendPost = async () => {
     if(loading) return;
     setLoading(true);
@@ -29,9 +29,7 @@ export default function Input() {
       name:session.user.name,
       username:session.user.username,
     });
-    setInput("");
-    setSelectedFile(null);
-    setLoading(false);
+    
     const imageRef = ref(storage, `posts/${docRef.id}/image`);
     if(selectedFile){
       await uploadString(imageRef, selectedFile, "data_url").then(async () => {
@@ -41,6 +39,9 @@ export default function Input() {
         })
       })
     }
+    setInput("");
+    setSelectedFile(null);
+    setLoading(false);
   }
 
 
