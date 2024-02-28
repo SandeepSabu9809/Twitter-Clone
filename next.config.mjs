@@ -7,6 +7,12 @@ const nextConfig = {
             // Add other routes as needed
         };
     },
+    // other configurations...
+    output: {
+        // generate files for the specified routes
+        pages: '/',
+        // other configurations...
+    },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
