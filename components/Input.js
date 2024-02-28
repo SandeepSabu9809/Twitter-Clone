@@ -8,6 +8,7 @@ import { db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { IoCloseOutline } from "react-icons/io5";
 import Image from "next/image";
+import customLoader from "./CustomImageLoader";
 
 
 export default function Input() {
@@ -66,6 +67,8 @@ export default function Input() {
          width={11}
          height={11}
          src={session.user.image} 
+         unoptimized={true}
+         loader={customLoader}
          alt="user" 
          className="w-11 h-11 rounded-full cursor-pointer hover:brightness-95 "
        />
