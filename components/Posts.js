@@ -6,12 +6,13 @@ import { FiShare2 } from "react-icons/fi";
 import { HiOutlineChartBar } from "react-icons/hi";
 import Moment from "react-moment";
 import { collection, deleteDoc, doc, onSnapshot, setDoc, snapshotEqual } from "firebase/firestore";
-import { db } from "../firebase";
+import { db, storage } from "../firebase";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import customLoader from "./CustomImageLoader";
 import { useEffect , useState } from "react"; 
 import { FaHeart } from "react-icons/fa";
+import { deleteObject, ref } from "firebase/storage";
 
 export default function Posts({post}) {
  
@@ -42,6 +43,15 @@ export default function Posts({post}) {
       signIn(); 
     }
     
+  }
+
+  async function deletePost(){
+    if(window.confirm("Are you sure you want to delete this post?")){
+      deleteDoc(doc(db, "posts", post.id));
+      if(post.data().image){
+        deleteObject(ref(storage,'posts/${post.id}/image'))
+      }
+    }
   }
 
   return (
@@ -80,16 +90,15 @@ export default function Posts({post}) {
            <div className="flex justify-between text-gray-500 p-2">
               {/* icons */}
               <IoChatbubbleEllipsesOutline className="w-9 h-9 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100" />
-              <FaRegTrashCan className="w-9 h-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100" />
+             {session?.user.id === post?.data().id && (
+               <FaRegTrashCan onClick={deletePost} className="w-9 h-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100" />
+             )}
+             
              <div className="flex items-center">
               {hasLiked ? (
-                <>
                 <FaHeart onClick={likePost} className="w-9 h-9 hoverEffect p-2 text-red-600 hover:bg-sky-100" /> 
-                </>
               ):(
-                <>
                 <FaRegHeart onClick={likePost} className="w-9 h-9 hoverEffect p-2 hover:text-red-600 hover:bg-sky-100" /> 
-                </>
               )}
               {likes.length > 0 && <span className={`${hasLiked && "text-red-600"} text-sm select-none`}  >{likes.length}</span>}
              </div>
