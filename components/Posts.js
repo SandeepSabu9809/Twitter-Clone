@@ -86,7 +86,9 @@ export default function Posts({post}) {
            {/* post-text */}
            <p className="text-gray-800 text-[15px] sm:text-[16px] mb-2 break-all pr-2 " style={{ overflowWrap: 'break-word' , whiteSpace: 'pre-line' }} >{post.data().text}</p>
            {/* post-image */}
-           <Image loader={customLoader} unoptimized={true} width={1920} height={1080} src={post.data().image} alt="gh" className="rounded-2xl mr-2 " />
+           {post.data().image ? (
+            <Image loader={customLoader} unoptimized={true} width={1920} height={1080} src={post?.data().image} alt="gh" className="rounded-2xl mr-2 " />
+           ):null}
            <div className="flex justify-between text-gray-500 p-2">
               {/* icons */}
               <IoChatbubbleEllipsesOutline className="w-9 h-9 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100" />

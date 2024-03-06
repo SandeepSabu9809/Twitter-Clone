@@ -4,6 +4,7 @@ import { SlMagnifier } from "react-icons/sl";
 import News from "./News";
 import Image from "next/image";
 import customLoader from "./CustomImageLoader";
+import { AnimatePresence, motion } from "framer-motion";
 
 
 export default function Widgets() {
@@ -52,23 +53,31 @@ export default function Widgets() {
             </div>
             <div className="text-gray-700 space-y-3 bg-gray-100 rounded-xl pt-2 w-[90%] xl:w-[75%] ">
                 <h4 className="font-bold text-xl px-4">What&apos;s happening</h4>
-                {articles.slice(0, count).map((article, index) => (
-                    <News key={index} props={article} />
-                ))}
+                <AnimatePresence>
+                    {articles.slice(0, count).map((article, index) => (
+                        <motion.div key={index} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:1}} >
+                            <News key={index} props={article} />
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
                 <button onClick={handleShowMore} className="text-blue-300 pl-4 pb-3 hover:text-blue-400">Show more</button>
             </div>
             <div className="sticky top-16 text-gray-700 space-y-3 bg-gray-100 pt-2 rounded-xl w-[90%] xl:w-[75%] ">
                 <h4 className="font-bold text-xl px-4" >Who to follow</h4>
-                {people.slice(0,pnum).map((randomuser) => (
-                    <div key={randomuser.login.username} className="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-200 ">
-                        <Image loader={customLoader} unoptimized={true} className="rounded-full" width={40} height={40} src={randomuser.picture.thumbnail} alt="" />
-                        <div className="truncate ml-4 leading-5">
-                            <h4 className="font-bold hover:underline text-[14px] " >{randomuser.login.username}</h4>
-                            <h5 className="text-[13px] text-gray-500 truncate " >{randomuser.name.first + " " + randomuser.name.last }</h5>
-                        </div>
-                        <button className="ml-auto bg-sky-500 text-white rounded-full text-sm px-3.5 py-1.5 font-bold" >follow</button>
-                    </div>
-                ))}
+                <AnimatePresence>
+                    {people.slice(0,pnum).map((randomuser) => (
+                        <motion.div key={randomuser.login.username} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:1}} >
+                            <div key={randomuser.login.username} className="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-200 transition duration-500 ease-out ">
+                                <Image loader={customLoader} unoptimized={true} className="rounded-full" width={40} height={40} src={randomuser.picture.thumbnail} alt="" />
+                                <div className="truncate ml-4 leading-5">
+                                    <h4 className="font-bold hover:underline text-[14px] " >{randomuser.login.username}</h4>
+                                    <h5 className="text-[13px] text-gray-500 truncate " >{randomuser.name.first + " " + randomuser.name.last }</h5>
+                                </div>
+                                <button className="ml-auto bg-sky-500 text-white rounded-full text-sm px-3.5 py-1.5 font-bold" >follow</button>
+                            </div>
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
                 <button onClick={handleShowMorePeople} className="text-blue-300 pl-4 pb-3 hover:text-blue-400">Show more</button>
             </div>
         </div>
