@@ -10,11 +10,13 @@ import { db, storage } from "../firebase";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import customLoader from "./CustomImageLoader";
-import { useEffect , useState } from "react"; 
+import { useEffect , useRef, useState } from "react"; 
 import { FaHeart } from "react-icons/fa";
 import { deleteObject, ref } from "firebase/storage";
 import { postIdState } from "../atom/ModalAtom";
 import { useRecoilState } from 'recoil';
+import { MdOutlinePhoto } from "react-icons/md";
+import { HiOutlineEmojiHappy } from "react-icons/hi";
 
 export default function Posts({post}) {
  
@@ -23,6 +25,8 @@ export default function Posts({post}) {
   const [hasLiked,setHasLiked] = useState(false);
   const [postId, setPostId] = useRecoilState(postIdState);
   const [postx,setPostx] = useState({});
+  const [input, setInput] = useState("");
+  const filePicker = useRef(null);
 
   useEffect(() => {
     if (postId) {
@@ -43,6 +47,9 @@ export default function Posts({post}) {
     )
   },[db])
 
+  function sendComment(){
+
+  }
 
   useEffect(()=>{
       setHasLiked(likes.findIndex((like)=>like.id === session?.user.id) !== -1);
@@ -142,12 +149,61 @@ export default function Posts({post}) {
           <dialog id="my_modal_3" className="modal">
             <div className="modal-box bg-white">
               <form method="dialog">
-                {/* if there is a button in form, it will close the modal */}
-                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 hoverEffect">✕</button>
+                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
               </form>
-              <p className="font-bold text-lg">Post ID: {postx?.username}</p>
-              {console.log(postx)}
-              <p className="py-4">Press ESC key or click on ✕ button to close</p>
+              <div className="p-2 flex items-center space-x-1 relative">
+               <span className="w-0.5 h-full z-[-1] absolute left-8 top-11 bg-gray-400"/>
+                <Image 
+                  width={11}
+                  height={11}
+                  src={postx?.userImg}
+                  loader={customLoader} 
+                  unoptimized={true}
+                  alt="user" 
+                  className="w-11 h-11 rounded-full mr-4  " 
+                />
+                <h4 className="font-bold text-[15px] sm:text-[16px] hover:underline ">{postx?.name}</h4>
+                    <span className="text-sm sm:text-[15px] ">@{postx?.username} -</span>
+                    <span className="text-sm sm:text-[15px} hover:underline">
+                      <Moment fromNow>
+                        {postx?.timestamp?.toDate()}
+                      </Moment>
+                    </span>
+              </div>
+              <p className="text-gray-500 text-[15px] sm:text-[16px] ml-16 mb-2 ">{postx?.text}</p>
+          <div className="flex border-b border-gray-200 p-3 space-x-3 ">
+          <Image 
+            width={11}
+            height={11}
+            src={session?.user.image} 
+            unoptimized={true}
+            loader={customLoader}
+            alt="user" 
+            className="w-11 h-11 rounded-full cursor-pointer hover:brightness-95 "
+          />
+          
+          <div className="w-full divide-y divide-gray-200 ">
+              <div className="">
+                  <textarea 
+                  className="w-full border-none focus:ring-0 text-lg placeholder-gray-700 tracking-wide min-h-[50px] text-gray-700 " rows="2" 
+                  placeholder="Tweet your reply" 
+                  value={input}
+                  onChange={(e)=>setInput(e.target.value)}
+                  > 
+                  </textarea>
+              </div>
+              <div className="flex items-center justify-between pt-2.5 ">
+                    <div className="flex">
+                      <div className="" onClick={()=>filePicker.current.click()}>
+                        <MdOutlinePhoto className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100 " />
+                        {/* <input type="file" hidden ref={filePicker} onChange={addImageToPost} /> */}
+                      </div>
+                      <HiOutlineEmojiHappy className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100 " />
+                    </div>
+                    <button onClick={sendComment} disabled={!input.trim()} className="bg-blue-400 text-white px-4 py-1.5 rounded-full font-bold shadow-md hover:brightness-95 disabled:opacity-50 " >Reply</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </dialog>
         </>
