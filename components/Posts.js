@@ -149,7 +149,7 @@ export default function Posts({post}) {
           <dialog id="my_modal_3" className="modal">
             <div className="modal-box bg-white">
               <form method="dialog">
-                <button className="btn btn-sm btn btn-ghost absolute focus:outline-none right-2 top-2">✕</button>
+                <button className="btn btn-sm btn-ghost absolute focus:outline-none right-2 top-2">✕</button>
               </form>
               <div className="p-2 flex items-center space-x-1 relative">
                <span className="w-0.5 h-full z-[-1] absolute left-8 top-11 bg-gray-400"/>
