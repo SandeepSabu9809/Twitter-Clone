@@ -13,18 +13,36 @@ import customLoader from "./CustomImageLoader";
 import { useEffect , useState } from "react"; 
 import { FaHeart } from "react-icons/fa";
 import { deleteObject, ref } from "firebase/storage";
+import { postIdState } from "../atom/ModalAtom";
+import { useRecoilState } from 'recoil';
 
 export default function Posts({post}) {
  
   const {data : session} = useSession();
-   const [likes,setLikes] = useState([]);
-   const [hasLiked,setHasLiked] = useState(false);
+  const [likes,setLikes] = useState([]);
+  const [hasLiked,setHasLiked] = useState(false);
+  const [postId, setPostId] = useRecoilState(postIdState);
+  const [postx,setPostx] = useState({});
+
+  useEffect(() => {
+    if (postId) {
+      const unsubscribe = onSnapshot(doc(db, "posts", postId), (snapshot) => {
+        setPostx(snapshot.data()); // Assuming you only want to set the data, adjust if necessary
+      });
+      // Cleanup function to unsubscribe from snapshot listener when component unmounts or when postId changes
+      return () => unsubscribe();
+    } else {
+      // Reset postx when postId becomes falsy
+      setPostx(null);
+    }
+  }, [postId]); // Run effect whenever postId changes or component mounts
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
       collection(db, "posts" , post.id , "likes"), (snapshot) => setLikes(snapshot.docs)
     )
   },[db])
+
 
   useEffect(()=>{
       setHasLiked(likes.findIndex((like)=>like.id === session?.user.id) !== -1);
@@ -44,6 +62,8 @@ export default function Posts({post}) {
     }
     
   }
+
+
 
   async function deletePost(){
     if(window.confirm("Are you sure you want to delete this post?")){
@@ -87,11 +107,19 @@ export default function Posts({post}) {
            <p className="text-gray-800 text-[15px] sm:text-[16px] mb-2 break-all pr-2 " style={{ overflowWrap: 'break-word' , whiteSpace: 'pre-line' }} >{post.data().text}</p>
            {/* post-image */}
            {post.data().image ? (
-            <Image loader={customLoader} unoptimized={true} width={1920} height={1080} src={post?.data().image} alt="gh" className="rounded-2xl mr-2 " />
+            <Image loader={customLoader} unoptimized={true} width={1920} height={1080} src={post?.data().image} alt="gh" className="w-auto h-auto rounded-2xl mr-2 " />
            ):null}
            <div className="flex justify-between text-gray-500 p-2">
               {/* icons */}
-              <IoChatbubbleEllipsesOutline className="w-9 h-9 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100" />
+
+
+              <IoChatbubbleEllipsesOutline 
+                  onClick={() => {
+                  setPostId(post.id);
+                  document.getElementById('my_modal_3').showModal();
+              }} className="w-9 h-9 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100" />
+             
+             
              {session?.user.id === post?.data().id && (
                <FaRegTrashCan onClick={deletePost} className="w-9 h-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100" />
              )}
@@ -110,6 +138,20 @@ export default function Posts({post}) {
               <HiOutlineChartBar className="w-9 h-9 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100" />
             </div>
         </div>
+        <>
+          <dialog id="my_modal_3" className="modal">
+            <div className="modal-box bg-white">
+              <form method="dialog">
+                {/* if there is a button in form, it will close the modal */}
+                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 hoverEffect">✕</button>
+              </form>
+              <p className="font-bold text-lg">Post ID: {postx?.username}</p>
+              {console.log(postx)}
+              <p className="py-4">Press ESC key or click on ✕ button to close</p>
+            </div>
+          </dialog>
+        </>
+        
     </div>
   )
 }

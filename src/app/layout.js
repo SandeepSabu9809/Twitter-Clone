@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { NextAuthProvider } from '../pages/api/auth/NextAuthProvider';
+import { RecoilStateProvider } from "@/pages/api/auth/RecoilStateProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,7 +15,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <NextAuthProvider>
-          {children}
+          <RecoilStateProvider>
+            {children}
+          </RecoilStateProvider>
         </NextAuthProvider>
       </body>
     </html>
