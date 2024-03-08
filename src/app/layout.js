@@ -3,6 +3,8 @@ import "./globals.css";
 import { NextAuthProvider } from '../pages/api/auth/NextAuthProvider';
 import { RecoilStateProvider } from "@/pages/api/auth/RecoilStateProvider";
 
+
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -14,11 +16,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NextAuthProvider>
-          <RecoilStateProvider>
-            {children}
-          </RecoilStateProvider>
-        </NextAuthProvider>
+          <NextAuthProvider>
+            <RecoilStateProvider>
+              {children}
+            </RecoilStateProvider>
+          </NextAuthProvider>
       </body>
     </html>
   );

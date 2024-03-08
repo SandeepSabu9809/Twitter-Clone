@@ -5,7 +5,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { FiShare2 } from "react-icons/fi";
 import { HiOutlineChartBar } from "react-icons/hi";
 import Moment from "react-moment";
-import { collection, deleteDoc, doc, onSnapshot, setDoc, snapshotEqual } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, onSnapshot, serverTimestamp, setDoc, snapshotEqual } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
@@ -17,16 +17,20 @@ import { postIdState } from "../atom/ModalAtom";
 import { useRecoilState } from 'recoil';
 import { MdOutlinePhoto } from "react-icons/md";
 import { HiOutlineEmojiHappy } from "react-icons/hi";
+import { useRouter } from "next/navigation";
 
-export default function Posts({post}) {
+
+export default function Posts({post , id}) {
  
   const {data : session} = useSession();
   const [likes,setLikes] = useState([]);
+  const [comments,setComments] = useState([]);
   const [hasLiked,setHasLiked] = useState(false);
   const [postId, setPostId] = useRecoilState(postIdState);
   const [postx,setPostx] = useState({});
   const [input, setInput] = useState("");
   const filePicker = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (postId) {
@@ -42,13 +46,33 @@ export default function Posts({post}) {
   }, [postId]); // Run effect whenever postId changes or component mounts
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(
-      collection(db, "posts" , post.id , "likes"), (snapshot) => setLikes(snapshot.docs)
-    )
+    if(id){
+      const unsubscribe = onSnapshot(
+        collection(db, "posts" , id , "likes"), (snapshot) => setLikes(snapshot.docs)
+      )
+      return () => unsubscribe()
+    }
   },[db])
 
-  function sendComment(){
+  useEffect(() => {
+    if(id){
+      const unsubscribe = onSnapshot(
+        collection(db, "posts" , id , "comments"), (snapshot) => setComments(snapshot.docs)
+      )
+      return () => unsubscribe()
+    }
+  },[db])
 
+  async function sendComment(){
+    await addDoc(collection(db,"posts",postId,"comments"),{
+      comment: input,
+      name:session.user.name,
+      username:session.user.username,
+      userImg:session.user.image,
+      timestamp:serverTimestamp(),
+    })
+    setInput("");
+    router.push(`/posts/${postId}`);
   }
 
   useEffect(()=>{
@@ -58,9 +82,9 @@ export default function Posts({post}) {
   async function likePost(){
     if(session){
       if(hasLiked){
-        await deleteDoc(doc(db, "posts", post.id, "likes", session?.user.id));
+        await deleteDoc(doc(db, "posts", id, "likes", session?.user.id));
       }else{
-        await setDoc(doc(db, "posts" , post.id ,"likes" , session?.user.id ), {
+        await setDoc(doc(db, "posts" , id ,"likes" , session?.user.id ), {
           username : session.user.username, 
         })
       }
@@ -74,9 +98,9 @@ export default function Posts({post}) {
 
   async function deletePost(){
     if(window.confirm("Are you sure you want to delete this post?")){
-      await deleteDoc(doc(db, "posts", post.id));
+      await deleteDoc(doc(db, "posts", id));
       if(post.data().image){
-        await deleteObject(ref(storage,'posts/${post.id}/image'))
+        await deleteObject(ref(storage,'posts/${id}/image'))
       }
     }
   }
@@ -84,26 +108,28 @@ export default function Posts({post}) {
   return (
     <div className="flex p-3 cursor-pointer border-b border-gray-200 " >
         {/* image */}
-        <Image 
-          width={11}
-          height={11}
-          src={post.data().userImg}
-          loader={customLoader} 
-          unoptimized={true}
-          alt="user" 
-          className="w-11 h-11 rounded-full mr-4  " 
-        />
+        {post?.data().userImg ? (
+          <Image 
+            width={11}
+            height={11}
+            src={post?.data().userImg}
+            loader={customLoader} 
+            unoptimized={true}
+            alt="user" 
+            className="w-11 h-11 rounded-full mr-4" 
+          />
+        ):null}
         {/* rightside */}
         <div className="flex-1">
             {/* header */}
             <div className="flex items-center justify-between ">
                 {/* post-user info */}
                 <div className="flex items-center space-x-1 whitespace-nowrap">
-                    <h4 className="font-bold text-[15px] sm:text-[16px] hover:underline ">{post.data().name}</h4>
-                    <span className="text-sm sm:text-[15px] ">@{post.data().username} -</span>
+                    <h4 className="font-bold text-[15px] sm:text-[16px] hover:underline ">{post?.data().name}</h4>
+                    <span className="text-sm sm:text-[15px] ">@{post?.data().username} -</span>
                     <span className="text-sm sm:text-[15px} hover:underline">
                       <Moment fromNow>
-                        {post.data()?.timestamp?.toDate()}
+                        {post?.data()?.timestamp?.toDate()}
                       </Moment>
                     </span>
                 </div>
@@ -111,21 +137,22 @@ export default function Posts({post}) {
                 <HiOutlineDotsHorizontal className="h-10 flex justify-end hoverEffect w-10 bg-sky-100 hover:text-sky-500 p-2"/>
             </div>
            {/* post-text */}
-           <p className="text-gray-800 text-[15px] sm:text-[16px] mb-2 break-all pr-2 " style={{ overflowWrap: 'break-word' , whiteSpace: 'pre-line' }} >{post.data().text}</p>
+           <p className="text-gray-800 text-[15px] sm:text-[16px] mb-2 break-all pr-2 " style={{ overflowWrap: 'break-word' , whiteSpace: 'pre-line' }} >{post?.data().text}</p>
            {/* post-image */}
-           {post.data().image ? (
-            <Image loader={customLoader} unoptimized={true} width={1920} height={1080} src={post?.data().image} alt="gh" className="w-auto h-auto rounded-2xl mr-2 " />
+           {post?.data().image ? (
+            <Image loader={customLoader} unoptimized={false} width={700} height={700} layout="responsive" src={post?.data().image} alt="gh" className=" w-auto h-auto rounded-2xl mr-2 " />
            ):null}
            <div className="flex justify-between text-gray-500 p-2">
               {/* icons */}
 
-
-              <IoChatbubbleEllipsesOutline 
-                  onClick={() => {
-                  setPostId(post.id);
-                  document.getElementById('my_modal_3').showModal();
-              }} className="w-9 h-9 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100" />
-             
+              <div className="flex items-center select-none ">   
+                <IoChatbubbleEllipsesOutline 
+                    onClick={() => {
+                    setPostId(id);
+                    document.getElementById('my_modal_3').showModal();
+                }} className="w-9 h-9 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100" />
+                {comments.length > 0 && <span className="text-sm select-none" >{comments.length}</span>}
+              </div>
              
              {session?.user.id === post?.data().id && (
                <FaRegTrashCan onClick={deletePost} className="w-9 h-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100" />
@@ -153,15 +180,17 @@ export default function Posts({post}) {
               </form>
               <div className="p-2 flex items-center space-x-1 relative">
                <span className="w-0.5 h-full z-[-1] absolute left-8 top-11 bg-gray-400"/>
-                <Image 
-                  width={11}
-                  height={11}
-                  src={postx?.userImg}
-                  loader={customLoader} 
-                  unoptimized={true}
-                  alt="user" 
-                  className="w-11 h-11 rounded-full mr-4  " 
-                />
+                {postx?.userImg ? (
+                  <Image 
+                    width={11}
+                    height={11}
+                    src={postx?.userImg}
+                    loader={customLoader} 
+                    unoptimized={true}
+                    alt="user" 
+                    className="w-11 h-11 rounded-full mr-4  " 
+                  />
+                ):null}
                 <h4 className="font-bold text-[15px] sm:text-[16px] hover:underline ">{postx?.name}</h4>
                     <span className="text-sm sm:text-[15px] ">@{postx?.username} -</span>
                     <span className="text-sm sm:text-[15px} hover:underline">
@@ -200,7 +229,7 @@ export default function Posts({post}) {
                       </div>
                       <HiOutlineEmojiHappy className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100 " />
                     </div>
-                    <button onClick={sendComment} disabled={!input.trim()} className="bg-blue-400 text-white px-4 py-1.5 rounded-full font-bold shadow-md hover:brightness-95 disabled:opacity-50 " >Reply</button>
+                      <button onClick={sendComment} disabled={!input.trim()} className="bg-blue-400 text-white px-4 py-1.5 rounded-full font-bold shadow-md hover:brightness-95 disabled:opacity-50 " >Reply</button> 
                   </div>
                 </div>
               </div>
