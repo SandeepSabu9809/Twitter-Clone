@@ -7,16 +7,19 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { useRouter } from "next/router";
 import Posts from "../../../components/Posts";
 import { useEffect, useState } from "react";
-import { doc, onSnapshot } from "firebase/firestore";
+import { collection, doc, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { RecoilRoot } from "recoil";
+import Comment from "../../../components/Comment";
 
 export default function Home() {
 
   const router = useRouter();
   const {id} = router.query;
   const [post,setPost] = useState(null);
+  const [comments,setComments] = useState([]);
 
+  //get post data
   useEffect(() => {
     if(id){
       const unsubscribe = onSnapshot(doc(db, "posts", id), (snapshot) => {
@@ -25,6 +28,20 @@ export default function Home() {
       return () => unsubscribe();
     }
   }, [db, id]);
+
+  //get comments
+ useEffect(() => {
+  if(id){
+    onSnapshot(
+        query(
+            collection(db, "posts", id, "comments"),
+            orderBy("timestamp", "desc")
+        ),
+        (snapshot) => setComments(snapshot.docs)
+
+    );
+  }
+ }, [db, id]);
 
    
     return (
@@ -45,6 +62,16 @@ export default function Home() {
       <SessionProvider>
         <RecoilRoot>
          <Posts id={id} post={post} />
+ 
+         {comments.length > 0 && (
+            <div>
+                {comments.map((comment) => (
+                    <Comment key={comment.id} id={comment.id} comment={comment.data()} />
+                ))}
+            </div>
+        )}
+ 
+
         </RecoilRoot>
       </SessionProvider>
 
