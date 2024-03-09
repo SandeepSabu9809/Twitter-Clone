@@ -49,11 +49,6 @@ export async function getServerSideProps() {
       },
     };
   } catch (error) {
-    console.error("Error fetching authentication providers:", error);
-    return {
-      props: {
-        providers: {},
-      },
-    };
+    throw new Error("Error fetching authentication providers: " + error.message);
   }
 }
