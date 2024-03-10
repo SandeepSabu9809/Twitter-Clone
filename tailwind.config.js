@@ -3,7 +3,8 @@ module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./src/pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",  
+    "./src/pages/auth/signin.js", 
   ],
   theme: {
     extend: {
@@ -15,7 +16,7 @@ module.exports = {
     },
   },
   daisyui: {
-    themes: null,
+    themes: ["light"],
   },
   plugins: [
     require('@tailwindcss/forms'),
