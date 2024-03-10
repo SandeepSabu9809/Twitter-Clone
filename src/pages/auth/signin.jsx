@@ -1,7 +1,22 @@
-import "../../app/globals.css";
+// import "../../app/globals.css";
 import { getProviders, signIn } from 'next-auth/react';
 import Image from 'next/image';
 import customLoader from '../../../components/CustomImageLoader';
+
+
+export async function getServerSideProps() {
+  try {
+    const providers = await getProviders();
+    return {
+      props: {
+        providers,
+      },
+    };
+  } catch (error) {
+    throw new Error("Error fetching authentication providers: " + error.message);
+  }
+}
+
 
 export default function Signin({ providers }) {
 
@@ -41,15 +56,4 @@ export default function Signin({ providers }) {
   );
 }
 
-export async function getServerSideProps() {
-  try {
-    const providers = await getProviders();
-    return {
-      props: {
-        providers,
-      },
-    };
-  } catch (error) {
-    throw new Error("Error fetching authentication providers: " + error.message);
-  }
-}
+
