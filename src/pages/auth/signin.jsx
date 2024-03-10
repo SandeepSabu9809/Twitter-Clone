@@ -1,24 +1,27 @@
+'use client'
 import "../../app/globals.css";
 import { getProviders, signIn } from 'next-auth/react';
 import Image from 'next/image';
 import customLoader from '../../../components/CustomImageLoader';
+import { useEffect, useState } from "react";
 
 
-export async function getServerSideProps() {
-  try {
-    const providers = await getProviders();
-    return {
-      props: {
-        providers,
-      },
+export default function Signin() {
+
+  const [providers, setProviders] = useState(null);
+
+  useEffect(() => {
+    const fetchProviders = async () => {
+      try {
+        const fetchedProviders = await getProviders();
+        setProviders(fetchedProviders);
+      } catch (error) {
+        console.error("Error fetching authentication providers:", error);
+      }
     };
-  } catch (error) {
-    throw new Error("Error fetching authentication providers: " + error.message);
-  }
-}
 
-
-export default function Signin({ providers }) {
+    fetchProviders();
+  }, []);
 
   return (
     <div className='flex justify-center mt-20 space-x-4'>
