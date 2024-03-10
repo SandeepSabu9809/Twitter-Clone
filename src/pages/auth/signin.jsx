@@ -1,4 +1,4 @@
-import "../../app/globals.css"
+import "../../app/globals.css";
 import { getProviders, signIn } from 'next-auth/react';
 import Image from 'next/image';
 import customLoader from '../../../components/CustomImageLoader';
@@ -11,7 +11,7 @@ export default function Signin({ providers }) {
         width={44}
         height={80}
         loader={customLoader}
-        unoptimized="true"
+        unoptimized={true}
         src="https://spy.family/wp-content/uploads/2022/12/ch12findtimelinepngtwimg1920.png"
         alt="Twitter image inside a phone"
         className='hidden object-cover md:w-44 md:h-80 rotate-6 md:inline-flex'
@@ -23,7 +23,7 @@ export default function Signin({ providers }) {
               width={36}
               height={36}
               loader={customLoader}
-              unoptimized="true"
+              unoptimized={true}
               className='w-36 object-cover'
               src={"https://static.vecteezy.com/system/resources/previews/023/986/731/original/twitter-logo-twitter-logo-transparent-twitter-icon-transparent-free-free-png.png"}
               alt='Twitter logo'
