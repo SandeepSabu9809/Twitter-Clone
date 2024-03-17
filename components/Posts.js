@@ -149,8 +149,12 @@ export default function Posts({post , id}) {
               <div className="flex items-center select-none ">   
                 <IoChatbubbleEllipsesOutline 
                     onClick={() => {
-                    setPostId(id);
-                    document.getElementById('my_modal_3').showModal();
+                      if(session){
+                        setPostId(id);
+                        document.getElementById('my_modal_3').showModal();
+                      }else{
+                        signIn();
+                      }
                 }} className="w-9 h-9 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100" />
                 {comments.length > 0 && <span className="text-sm select-none" >{comments.length}</span>}
               </div>
