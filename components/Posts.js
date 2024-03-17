@@ -228,7 +228,7 @@ export default function Posts({post , id}) {
               </div>
               <div className="flex items-center justify-between pt-2.5 ">
                     <div className="flex">
-                      <div className="" onClick={()=>filePicker.current.click()}>
+                      <div className="">
                         <MdOutlinePhoto className="h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100 " />
                         {/* <input type="file" hidden ref={filePicker} onChange={addImageToPost} /> */}
                       </div>
