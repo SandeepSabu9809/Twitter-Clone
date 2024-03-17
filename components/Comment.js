@@ -31,6 +31,7 @@ export default function Comment({comment , commentId , originalPostId}) {
   const filePicker = useRef(null);
   const router = useRouter();
 
+
   useEffect(() => {
     if (postId) {
       const unsubscribe = onSnapshot(doc(db, "posts", postId), (snapshot) => {
@@ -95,7 +96,7 @@ export default function Comment({comment , commentId , originalPostId}) {
   }
 
   return (
-    <div className="flex p-3 cursor-pointer border-b border-gray-200 " >
+    <div className="flex p-3 cursor-pointer border-b border-gray-200  pl-20" >
         {/* image */}
         {comment?.userImg ? (
           <Image 
@@ -126,7 +127,7 @@ export default function Comment({comment , commentId , originalPostId}) {
                 <HiOutlineDotsHorizontal className="h-10 flex justify-end hoverEffect w-10 bg-sky-100 hover:text-sky-500 p-2"/>
             </div>
            {/* post-text */}
-           <p className="text-gray-800 text-[15px] sm:text-[16px] mb-2 break-all pr-2 " style={{ overflowWrap: 'break-word' , whiteSpace: 'pre-line' }} >{comment?.text}</p>
+           <p className="text-gray-800 text-[15px] sm:text-[16px] mb-2 break-all pr-2 " style={{ overflowWrap: 'break-word' , whiteSpace: 'pre-line' }} >{comment?.comment}</p>
            {/* post-image */}
            {comment?.image ? (
             <Image loader={customLoader} unoptimized={false} width={700} height={700} layout="responsive" src={comment?.image} alt="gh" className=" w-auto h-auto rounded-2xl mr-2 " />
@@ -135,16 +136,12 @@ export default function Comment({comment , commentId , originalPostId}) {
               {/* icons */}
 
               <div className="flex items-center select-none ">   
-                <IoChatbubbleEllipsesOutline 
-                    onClick={() => {
-                    setPostId(id);
-                    document.getElementById('my_modal_3').showModal();
-                }} className="w-9 h-9 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100" />
+                <IoChatbubbleEllipsesOutline className="w-9 h-9 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100" />
                 {comment.length > 0 && <span className="text-sm select-none" >{comment.length}</span>}
               </div>
              
-             {session?.user.id === comment?.id && (
-               <FaRegTrashCan onClick={deletePost} className="w-9 h-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100" />
+             {session?.user.id === comment?.userId && (
+               <FaRegTrashCan onClick={deleteComment} className="w-9 h-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100" />
              )}
              
              <div className="flex items-center">

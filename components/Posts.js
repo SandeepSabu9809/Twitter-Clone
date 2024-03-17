@@ -70,6 +70,7 @@ export default function Posts({post , id}) {
       username:session.user.username,
       userImg:session.user.image,
       timestamp:serverTimestamp(),
+      userId:session.user.id,
     })
     setInput("");
     router.push(`/posts/${postId}`);
