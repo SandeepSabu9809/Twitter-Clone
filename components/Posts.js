@@ -213,7 +213,7 @@ export default function Posts({post , id}) {
             unoptimized={true}
             loader={customLoader}
             alt="user" 
-            className="w-11 h-11 rounded-full cursor-pointer hover:brightness-95 "
+            className="w-10 h-11 rounded-full cursor-pointer hover:brightness-95 "
           />
           
           <div className="w-full divide-y divide-gray-200 ">
