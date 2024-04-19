@@ -191,7 +191,7 @@ export default function Posts({post , id}) {
                     height={11}
                     src={postx?.userImg}
                     loader={customLoader} 
-                    unoptimized={true}
+                    unoptimized={false}
                     alt="user" 
                     className="w-11 h-11 rounded-full mr-4  " 
                   />
