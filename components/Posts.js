@@ -141,9 +141,9 @@ export default function Posts({post , id}) {
            <p className="text-gray-800 text-[15px] sm:text-[16px] mb-2 break-all pr-2 " style={{ overflowWrap: 'break-word' , whiteSpace: 'pre-line' }} >{post?.data().text}</p>
            {/* post-image */}
            {post?.data().image ? (
-            <Image loader={customLoader} unoptimized={false} width={700} height={700} layout="responsive" src={post?.data().image} alt="gh" className=" w-auto h-auto rounded-2xl mr-2 " />
+            <Image loader={customLoader} unoptimized={false} fill layout="responsive" src={post?.data().image} alt="gh" className=" w-auto h-auto rounded-2xl " />
            ):null}
-           <div className="flex justify-between text-gray-500 p-2">
+           <div className="flmrustify-between text-gray-500 p-2">
               {/* icons */}
 
               <div className="flex items-center select-none ">   
