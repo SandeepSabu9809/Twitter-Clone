@@ -31,8 +31,8 @@ export default function Signin() {
         loader={customLoader}
         unoptimized={true}
         src="https://spy.family/wp-content/uploads/2022/12/ch12findtimelinepngtwimg1920.png"
-        alt="Twitter image inside a phone"
-        className='w-44 h-80 object-cover rotate-6'
+        alt=" "
+        className='hidden object-cover md:w-44 md:h-80 rotate-6 md:inline-flex'
       />
       <div className="">
         {providers && Object.values(providers).map((provider) => (
