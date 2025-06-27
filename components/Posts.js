@@ -130,8 +130,11 @@ export default function Posts({post , id}) {
                     {/*
                     <span className="text-sm sm:text-[15px] ">@{post?.data().username?.slice(0,4)} -</span>
                      */}
-                     <span className="text-sm sm:hidden">@{postx?.username?.slice(0, 4)} -</span>
-                     <span className="hidden sm:inline text-sm sm:text-[15px]">@{postx?.username} -</span>
+                     {/* Mobile view: sliced username */}
+                     <span className="text-sm inline sm:hidden">@{postx?.username?.slice(0, 4)} -</span>
+
+                      {/* Tablet and desktop: full username */}
+                      <span className="hidden sm:inline text-sm sm:text-[15px]">@{postx?.username} -</span>
                     <span className="text-sm sm:text-[15px} hover:underline">
                       <Moment fromNow>
                         {post?.data()?.timestamp?.toDate()}
