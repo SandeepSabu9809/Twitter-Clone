@@ -24,7 +24,7 @@ export default function Signin() {
   }, []);
 
   return (
-    <div className='flex justify-center mt-20 space-x-4'>
+    <div className="flex flex-col md:flex-row justify-center items-center mt-20 space-y-6 md:space-y-0 md:space-x-8">
       <Image
         width={44}
         height={80}
@@ -39,15 +39,15 @@ export default function Signin() {
           <>
             <div key={provider.id} className="flex flex-col items-center">
               <Image
-                width={36}
-                height={36}
+                width={144}
+                height={144}
                 loader={customLoader}
                 unoptimized={true}
                 className='w-36 object-cover'
                 src={"https://static.vecteezy.com/system/resources/previews/023/986/731/original/twitter-logo-twitter-logo-transparent-twitter-icon-transparent-free-free-png.png"}
                 alt='Twitter logo'
               />
-              <p className='text-blue-800 text-center text-sm my-10 italic'>
+              <p className='text-blue-800 text-sm my-6 italic'>
                 This app is created for learning purposes
               </p>
               <button onClick={() => signIn(provider.id, { callbackUrl: "/" })} className='bg-red-400 rounded-lg p-3 text-white hover:bg-red-500'>
