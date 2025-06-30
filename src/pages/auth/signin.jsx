@@ -25,7 +25,7 @@ export default function Signin() {
 
   return (
     <div className="flex flex-col md:flex-row justify-center items-center mt-20 space-y-6 md:space-y-0 md:space-x-8">
-      <Image
+      {/* <Image
         width={44}
         height={80}
         loader={customLoader}
@@ -33,7 +33,7 @@ export default function Signin() {
         src="https://spy.family/wp-content/uploads/2022/12/ch12findtimelinepngtwimg1920.png"
         alt=" "
         className='hidden object-cover md:w-44 md:h-80 rotate-6 md:inline-flex'
-      />
+      /> */}
       <div className="">
         {providers && Object.values(providers).map((provider) => (
           <>
